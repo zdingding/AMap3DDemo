@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="D:\demo\AMap3DDemo\app\libs\Volley.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.2"
+        sha1="77faa9ffd189160d1e22c58fdf5eed0a9a08b816">
+        <dex dex="D:\demo\AMap3DDemo\app\build\intermediates\pre-dexed\debug\Volley_a50d2bce17c661505ab288ec27b84920209932b3.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\demo\AMap3DDemo\app\libs\android-support-v4.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.2"
+        sha1="307c1cc532eabbf1d135b43e5c983c9da700449d">
+        <dex dex="D:\demo\AMap3DDemo\app\build\intermediates\pre-dexed\debug\android-support-v4_ad46efca4554d1894671937b346e06a8c8bdebd9.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\demo\AMap3DDemo\app\libs\AMap3DMap_5.0.0_AMapNavi_1.9.4_AMapSearch_5.0.0_AMapLocation_3.3.0_20170311.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.2"
+        sha1="2205306d3454f0829b602c6d72bd8eae336af258">
+        <dex dex="D:\demo\AMap3DDemo\app\build\intermediates\pre-dexed\debug\AMap3DMap_5.0.0_AMapNavi_1.9.4_AMapSearch_5.0.0_AMapLocation_3.3.0_20170311_81171d6d8c9069fb56813d2ccd14ab0ae1e82105.jar" />
+    </item>
+
+</items>

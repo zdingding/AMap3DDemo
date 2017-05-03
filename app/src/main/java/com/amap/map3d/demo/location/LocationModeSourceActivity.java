@@ -12,9 +12,12 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
@@ -56,12 +59,14 @@ public class LocationModeSourceActivity extends Activity implements AMap.OnMyLoc
 	private RadioGroup mGPSModeGroup;
 	private MyLocationStyle myLocationStyle;
 	private RunRecordingService myservice = null;//绑定的service对象\
-	private	TextView juli;
 	private	ProgressBar	mProgressBar;
 	private UiSettings mUiSettings;
 	private	List<LatLng> latLngs;
 	private  LatLng  myLatLng;
 	private  Button  btn_mywey;
+	private	ListView lv;
+	private MyAdapter mAdapter;
+	private MyOnMapTouchListener	 myOnMapTouchListener;
 	List list = new ArrayList();//获取距离这些点的所有的距离 看看离那里比较近
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -71,29 +76,64 @@ public class LocationModeSourceActivity extends Activity implements AMap.OnMyLoc
 		mapView = (MapView) findViewById(R.id.map);
 
 		mProgressBar = (ProgressBar) findViewById(R.id.progressBar1);
-		juli = (TextView) findViewById(R.id.juli);
+
 		btn_mywey = (Button) findViewById(R.id.btn_mywey);
-		juli.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-			}
-		});
+		 lv = (ListView) findViewById(R.id.lv);
 		mapView.onCreate(savedInstanceState);// 此方法必须重写
 		init();
 		btn_mywey.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				latLngs =myOnMapTouchListener.getLatLngs();//所有的点 与我的位置
+				if (myLatLng!=null&&latLngs!=null) {
+					for(int i=0;i<latLngs.size();i++){
+						float distance = AMapUtils.calculateLineDistance(myLatLng, latLngs.get(i));
+						list.add(distance);
+					}
+				}
 				//找到最小值          的索引
-				int indexOf = list.indexOf(Collections.min(list));
-			
-			//	latLngs.get(indexOf);
-				float	distance = AMapUtils.calculateLineDistance(myLatLng, latLngs.get(0));//计算距离
-				btn_mywey.setText(distance+"");
+				mAdapter = new MyAdapter();
+
+				lv.setAdapter(mAdapter);
 			}
 		});
 	}
 
+	class 	MyAdapter extends BaseAdapter{
 
+	@Override
+	public int getCount() {
+		return list.size();
+	}
+
+	@Override
+	public Object getItem(int position) {
+		return list.get(position);
+	}
+
+	@Override
+	public long getItemId(int position) {
+		return position;
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		ViewHolder holder;
+		if (convertView == null) {
+			holder = new ViewHolder();
+			convertView = View.inflate(LocationModeSourceActivity.this, R.layout.textitem, null);
+			holder.date = (TextView) convertView.findViewById(R.id.data);
+			convertView.setTag(holder);
+			}else{
+			holder = (ViewHolder) convertView.getTag();
+		}
+		holder.date.setText(list.get(position)+"");
+		return convertView;
+	}
+		private class ViewHolder {
+			TextView date;
+		}
+}
 
 	/**
 	 * 初始化
@@ -136,15 +176,9 @@ public class LocationModeSourceActivity extends Activity implements AMap.OnMyLoc
 		aMap.setMyLocationStyle(myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE));
 		aMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
 		aMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
-		MyOnMapTouchListener	 myOnMapTouchListener =new MyOnMapTouchListener(LocationModeSourceActivity.this,aMap,true);
+	    myOnMapTouchListener =new MyOnMapTouchListener(LocationModeSourceActivity.this,aMap,true);
 		aMap.setOnMapTouchListener(myOnMapTouchListener);
-	    latLngs =myOnMapTouchListener.getLatLngs();//所有的点 与我的位置
-		if (myLatLng!=null&&latLngs!=null) {
-			for(int i=0;i<latLngs.size();i++){
-				float distance = AMapUtils.calculateLineDistance(myLatLng, latLngs.get(i));
-				list.add(distance);
-			}
-		}
+
 	}
 
 	@Override
@@ -158,7 +192,6 @@ public class LocationModeSourceActivity extends Activity implements AMap.OnMyLoc
                 aMap.setMyLocationStyle(myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW));
 				if (myLatLng!=null&&latLngs!=null) {
 					float distance = AMapUtils.calculateLineDistance(myLatLng, latLngs.get(0));
-					juli.setText(distance+"");
 				}
                 break;
             case R.id.gps_rotate_button:

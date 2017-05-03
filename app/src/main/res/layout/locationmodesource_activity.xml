@@ -188,18 +188,18 @@
             android:textColor="@android:color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
-        <TextView
-            android:id="@+id/juli"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0.0"
-            android:textColor="@android:color/black"
-            android:textSize="36sp"
-            android:textStyle="bold" />
+
         <Button
+            android:text="查所有的数字"
             android:id="@+id/btn_mywey"
             android:layout_width="50dp"
             android:layout_height="50dp" />
     </LinearLayout>
+
+        <ListView
+            android:id="@+id/lv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></ListView>
+
 
 </FrameLayout>
